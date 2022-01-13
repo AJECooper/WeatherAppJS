@@ -1,7 +1,13 @@
-const api = {
-    key: process.env.API_KEY,
-    url: "https://api.openweathermap.org/data/2.5/"
-}
+import getCurrentWeatherAsync from "./Services/WeatherServices";
+import getCurrentWeatherComponent from "./Components/WeatherComponents";
 
+const form = document.querySelector('#search-city');
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const city = formData.get('city-input');
 
-console.log(api.key);
+    const currentWeather = await getCurrentWeatherAsync(city);
+    getCurrentWeatherComponent(currentWeather);
+})
