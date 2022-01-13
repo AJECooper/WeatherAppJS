@@ -1,0 +1,14 @@
+{
+  "source": "index.html",
+  "scripts": {
+    "start": "parcel --open",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.1.1",
+    "parcel": "^2.1.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  }
+}
