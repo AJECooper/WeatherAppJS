@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="node_modules/weather-icons/css/weather-icons.css">
     <link rel="stylesheet" href="style.scss">
 
     <title>Weather App JS</title>
@@ -26,11 +27,11 @@
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title location-info">--</div>
+                        <div class="card-title location-info" id="weather-location">--</div>
                         <div class="text-muted">Today</div>
                         <div class="weather-info">
-                            <div class="temperature">--</div>
-                            <div class="description">--</div>
+                            <div class="temperature" id="current-temp">--</div>
+                            <div class="description" id="current-description">--</div>
                         </div>
                     </div>
                 </div>
@@ -38,7 +39,7 @@
         </div>
     </div>
     <div class="container future-weather-container mt-3">
-        <div class="row weather-row">
+        <div class="row weather-row" id="future-weather-row">
             
         </div>
     </div>
