@@ -1,33 +1,57 @@
-import * as moment from 'moment';
+import * as moment from "moment";
+import { weatherKeys, weatherConstants } from "../Constants/WeatherConstants";
 
-function getCurrentWeatherComponent(weatherResponse){
-    const location = document.querySelector('.location-info');
-    const {name, sys:{country}, weather} = weatherResponse;
+function getCurrentWeatherComponent(weatherResponse) {
+  const weatherResponseId = weatherResponse.weather[0].id;
+  const weatherObject = getWeatherObjectConstant(weatherResponseId);
 
-    location.textContent = `${name}, ${country}`;
+  const {name, sys:{country}, main:{temp}} = weatherResponse;
+  const {description} = weatherObject;
 
-    const description = weather[0].description;
-    const desciptionElement = document.querySelector('.description');
-    desciptionElement.textContent = description;
+  const locationElement = document.getElementById('weather-location');
+  const temperatureElement = document.getElementById('current-temp'); 
+  const descriptionElement = document.getElementById('current-description');
 
-    const temperature = weatherResponse.main.temp;
-    const temperatureElement = document.querySelector('.temperature');
-    temperatureElement.textContent = `${temperature}°c`;
+  locationElement.textContent = `${name}, ${country}`;
+  temperatureElement.textContent = `${Math.round(temp)}°c`;
+  descriptionElement.textContent = `${description}`;
 }
 
-function getFutureWeatherComponent(dayWeather){
-    let {dt} = dayWeather;
-    let date = moment.unix(dt).format("MM/DD/YYYY");
-    const day = moment(date).format('ddd');
+function getFutureWeatherComponent(weatherForDay) {
+  const weatherId = weatherForDay.weather[0].id;
+  const weatherObject = getWeatherObjectConstant(weatherId);
 
-    const upcomingWeatherElement = document.createElement('div');
-    upcomingWeatherElement.classList.add('col-3');
-    upcomingWeatherElement.classList.add('upcoming-weather');
+  const {description, colour, icon} = weatherObject;
 
-    upcomingWeatherInner = `<div class='card my-3'><div class='card-body'><div class="day-of-week">${day}</div><div class='weather-description'>${dayWeather.weather[0].description}</div></div></div>`;
-    upcomingWeatherElement.innerHTML = upcomingWeatherInner;
+  let {dt} = weatherForDay;
+  let date = moment.unix(dt).format("MM/DD/YYYY");
 
-    document.querySelector('.weather-row').appendChild(upcomingWeatherElement)
+  const container = document.createElement("div");
+  container.classList.add("col-12", "col-md-4", "col-xl-3", "mb-3");
+
+  const upcomingWeatherInner = `
+    <div class="card future-weather-card"><div class="colour-stripe"></div>
+    <div class="card-content">
+    <div class="card-body">
+    <div class="media d-flex justify-content-around">
+    <div class="align-self-center"><i class="wi ${icon}"></i></div>
+    <div class="media-body">
+    <div class="weather-description d-block text-end">${description}</div>
+    <span class="text-muted date-info">${moment(date).format("ddd")} ${moment(date).format("DD/MM/YYYY")}</span>
+    </div></div></div></div></div></div>`;
+
+  container.innerHTML += upcomingWeatherInner;
+
+  const stripe = container.querySelector(".colour-stripe");
+  stripe.style.backgroundColor = colour;
+
+  document.querySelector("#future-weather-row").appendChild(container);
+} 
+
+function getWeatherObjectConstant (id) {
+  const weatherConstObject = weatherConstants.find(w => w.codes.find(c => c == id));
+  
+  return weatherConstObject;
 }
 
-export { getCurrentWeatherComponent, getFutureWeatherComponent }
+export { getCurrentWeatherComponent, getFutureWeatherComponent };
